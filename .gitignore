@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Vagrant owned files
+.vagrant/
+
+# Credentials
+credentials.yaml
+*os_credentials*
+
+# Disk images
+*.img
+
+# Log files
+*.log
+
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+.terraform
+
+

@@ -1,0 +1,78 @@
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# for vm status = Guru Meditation run
+
+# vboxmanage startvm <vm-name> --type emergencystop
+
+#vbguest issues : https://github.com/dotless-de/vagrant-vbguest
+#source https://github.com/christianb93/openstack-labs
+
+
+# VM_BOX_NAME="ubuntu/trusty64"
+# "ubuntu/bionic64" is giving too much trouble
+VM_BOX_NAME   = "ubuntu/bionic64"
+VBGUEST_UPDATE = true  # Do not update VM_GUEST Packages, packages like ubuntu/bionic64 raise error when update VB Guest
+VM_GUI         = false  # value true will start machines with a GUI
+Vagrant.configure("2") do |config|
+  # vbguest update is falase for this BOX only
+  # if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = VBGUEST_UPDATE
+    config.vbguest.installer_options = { allow_kernel_upgrade: VBGUEST_UPDATE }
+  # end
+
+  config.vm.define "controller" do |controller|
+    controller.vm.hostname = "controller.local"
+    controller.vm.box      = "#{VM_BOX_NAME}"
+
+    controller.vm.network "private_network" , ip: "192.168.10.2", name: "VirtualBox Host-Only Ethernet Adapter #7"
+    # controller.vm.network "private_network", ip: "172.16.10.2",  name: "VirtualBox Host-Only Ethernet Adapter #6", auto_config: false
+    # controller.vm.network "forwarded_port", guest: 22, host: 8222
+
+    controller.vm.provider "virtualbox" do |v|
+      # v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+      # v.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+      v.customize ["modifyvm", :id, "--cableconnected1", "on"]
+      v.name   = "controller"
+      v.gui    = VM_GUI
+      v.memory = 6144
+      v.cpus   = 2
+
+    end
+  end
+
+  config.vm.define "compute1" do |compute1|
+    compute1.vm.hostname = "compute1.local"
+    compute1.vm.box      = "#{VM_BOX_NAME}"
+    compute1.vm.network "private_network", ip: "192.168.10.12", name: "VirtualBox Host-Only Ethernet Adapter #5"
+    # compute1.vm.network "private_network", ip: "172.16.10.3",   name: "VirtualBox Host-Only Ethernet Adapter #6", auto_config: false
+    # compute1.vm.network "forwarded_port", guest: 22, host: 8200
+    compute1.vm.provider "virtualbox" do |v|
+      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+      v.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+      v.customize ["modifyvm", :id, "--description", "worker Node1"]
+      v.gui    = VM_GUI
+      v.name   = "compute1"
+      v.memory = 4096
+      v.cpus   = 2
+    end
+  end
+
+  config.vm.define "compute2" do |compute2|
+    compute2.vm.hostname = "compute2.local"
+    compute2.vm.box      = "#{VM_BOX_NAME}"
+    compute2.vm.network "private_network", ip: "192.168.10.22", name: "VirtualBox Host-Only Ethernet Adapter #5"
+    # compute2.vm.network "private_network", ip: "172.16.10.4",   name: "VirtualBox Host-Only Ethernet Adapter #6",  auto_config: false
+    # compute2.vm.network "forwarded_port", guest: 22, host: 8201
+    compute2.vm.provider "virtualbox" do |v|
+      v.check_guest_additions = true
+      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+      v.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+      v.customize ["modifyvm", :id, "--description", "worker Node2"]
+      v.gui    = VM_GUI
+      v.name   = "compute2"
+      v.memory = 4096
+      v.cpus   = 2
+    end
+  end
+end
