@@ -5,6 +5,8 @@ Host controller
     IdentityFile ~/.ssh/machines/controller/virtualbox/private_key
     IdentitiesOnly yes
     LogLevel FATAL
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
 
 Host compute1
     HostName 192.168.100.21
@@ -13,6 +15,8 @@ Host compute1
     IdentityFile ~/.ssh/machines/compute1/virtualbox/private_key
     IdentitiesOnly yes
     LogLevel FATAL
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
 
 Host compute2
     HostName 192.168.100.22
@@ -21,3 +25,5 @@ Host compute2
     IdentityFile ~/.ssh/machines/compute2/virtualbox/private_key
     IdentitiesOnly yes
     LogLevel FATAL
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
