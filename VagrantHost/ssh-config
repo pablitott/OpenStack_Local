@@ -1,0 +1,23 @@
+Host controller
+    HostName 192.168.100.11
+    User vagrant
+    Port 22
+    IdentityFile ~/.ssh/machines/controller/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+
+Host compute1
+    HostName 192.168.100.21
+    User vagrant
+    Port 22
+    IdentityFile ~/.ssh/machines/compute1/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+
+Host compute2
+    HostName 192.168.100.22
+    User vagrant
+    Port 22
+    IdentityFile ~/.ssh/machines/compute2/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL

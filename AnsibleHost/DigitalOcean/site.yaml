@@ -1,0 +1,91 @@
+---
+# This playbook will bring up a DigitalOcean machine, 
+# download the OpenStack labs and run a lab on the remote
+# machine
+
+# 
+# Make sure that DO_TOKEN contains a valid token! You will
+# also need to install jmespath using
+# pip3 install jmespath
+#
+
+
+- name: Create machines
+  hosts: localhost
+  connection: local
+  vars_files:
+    global_vars.yaml
+  vars:
+    sizeID: s-6vcpu-16gb
+    doPrivateKeyFile: ~/.ssh/do-stack-key
+    doKeyName: do-stack-key
+  roles:
+  - droplet
+
+# The second play will wait until all machines are fully established. Here we use the inventory
+# that we have just created. Note that we have added the hosts with the SSH settings to the inventory,
+# so there is no need to supply the ansible_ssh_private_key_file and ansible_user values
+# We initially do not gather facts, as the SSH daemon might still be starting up, but just wait for
+# the hosts to come up
+- name: Wait for all machines to become ready
+  hosts: droplets
+  gather_facts: no
+  tasks:
+  - name: Wait for machine to become reachable
+    wait_for_connection:
+      delay: 30
+      sleep: 30
+
+#
+# Install a few basic firewall rules on the machine
+#
+- name: Install firewall rules
+  hosts: droplets
+  become: yes
+  roles:
+    - firewall
+
+# The next play starts the actual setup of the machines. We first create a default user
+- name: Basic setup
+  hosts: droplets
+  roles:
+  - defaultUser
+
+#
+# Prepare lab host and run lab 
+#
+- name: Prepare lab host and run lab 
+  vars_files:
+    global_vars.yaml
+  hosts: droplets
+  roles:
+    - labHost
+    - runLab
+
+#
+# Print completion message and usage instructions
+#
+- name: Print completion message and usage instructions
+  hosts: droplets
+  vars_files:
+    global_vars.yaml
+  become: yes
+  become_user: stack
+  tasks:
+    - name: Get credentials from remote host 
+      fetch:
+        src: "~/.os_credentials/credentials.yaml"
+        dest: .os_credentials/{{inventory_hostname}}-credentials.yaml
+        flat: yes
+    - name: Read credentials 
+      include_vars:
+        file: ".os_credentials/{{inventory_hostname}}-credentials.yaml"
+    - name: Print completion
+      debug:
+        msg: | 
+          Done. To connect to the Horizon dashboard, run an SSH tunnel using 
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i {{userPrivateKeyFile}} -L 2080:192.168.1.11:80  stack@{{hostvars.stack0.ansible_ssh_host}} 
+          and point your browser to localhost:2080/horizon. The password for the demo user is 
+          {{OS_DEMO_PASSWORD}}
+          The password for the admin user is
+          {{OS_ADMIN_PASSWORD}}

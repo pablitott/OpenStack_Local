@@ -1,0 +1,95 @@
+##########################################################################
+# When we stop and restart on GCE, new public IP addresses are assigned
+# We therefore need to fix all configurations that contain these public
+# IP addresses:
+# * our SSH configuration
+# * the VNC URL which contains the Horizon node IP
+# Also make sure to run terraform apply at least once to put the
+# new public IP addresses into the cached output
+##########################################################################
+
+
+# This play will run Terraform via the Terraform module
+# and build a dynamic inventory from its output
+- name: Run Terraform and build inventory dynamically
+  hosts: localhost
+  roles:
+  - terraform
+
+# We build a local SSH configuration. This is not necessarily needed, but
+# makes it easy to SSH into the machines using their logical name
+- name: Build SSH configuration
+  hosts: localhost
+  vars:
+    ansible_ssh_private_key_file: "~/.ssh/gcp-default-key"
+  roles:
+  - sshConfig
+
+#
+# Import credentials
+#
+- name: Import credentials
+  hosts: all
+  gather_facts: no
+  vars_files:
+    global_vars.yaml
+  tasks:
+    - name: Read credentials
+      include_vars:
+        file: "{{credentials_dir}}/credentials.yaml"
+
+#
+# Update Nova installation on compute nodes so
+# that the new vnc_ip is pulled in
+#
+- name: Install Nova on compute nodes
+  hosts: compute_nodes
+  become: yes
+  vars_files:
+    global_vars.yaml
+  vars:
+    neutron_keystone_user_password: "{{OS_SERVICE_PASSWORD}}"
+    rabbitmq_password: "{{OS_SERVICE_PASSWORD}}"
+    keystone_admin_password: "{{OS_ADMIN_PASSWORD}}"
+    nova_db_user_password: "{{OS_SERVICE_PASSWORD}}"
+    nova_keystone_user_password: "{{OS_SERVICE_PASSWORD}}"
+    placement_keystone_user_password: "{{OS_SERVICE_PASSWORD}}"
+  roles:
+    - nova_compute
+
+
+#
+# Also run proxy configuration again for the same reason
+#    
+- name: Set up proxy on network node
+  hosts: network_nodes
+  become: yes
+  vars_files:
+    - global_vars.yaml
+  vars:
+    os_known_ports: ['5000', '8774', '8776', '8778', '9696', '9292', '9876']
+  roles: 
+  - proxy
+
+#
+# Print completion message and usage instructions once
+# more as the IP addresses might have changed
+#
+- name: Print completion message and usage instructions
+  hosts: localhost
+  vars_files:
+    global_vars.yaml
+  tasks:
+    - name: Read credentials 
+      include_vars:
+        file: "{{credentials_dir}}/credentials.yaml"
+    - name: Print completion
+      debug:
+        msg: 
+          - Done. To connect to the Horizon dashboard, point your browser to 
+          - https://{{hostvars.network.ansible_ssh_host}}/horizon 
+          - and ignore certificate errors (or import {{credentials_dir}}/nginx/ca.crt into your browser). 
+          - The password for the demo user is 
+          - "{{OS_DEMO_PASSWORD}}"
+          - The password for the admin user is
+          - "{{OS_ADMIN_PASSWORD}}"    
