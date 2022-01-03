@@ -3,24 +3,23 @@
 
 This work is based on [setting up your own OpenStack playground](https://leftasexercise.com/2020/01/27/setting-up-our-openstack-playground/) because the necessity to practice OpenStack knowledge in a free environment, it means no risk to mess up a production OpenStack environment
 
+The source for this work can be found at: [GIT repository](https://github.com/christianb93/openstack-labs), the original job was modified to be used in a Windows 10 environment
 
+**Let's begin**  
 
+To avoid confussion, let us first fix some terms. First, there is an actual physical machine on which the Labs will run, in fact is this pc I'm using to write down this post, let's call this machine **PC**, which is runninb Windows 10, i thie PC we will i nstall the Virtual Hosts using [Oracle Virtual Box](https://www.virtualbox.org/) and we let's call this machine as **Vagrant Host**.
 
-The source for this work can be found at: [GIT repository](https://github.com/christianb93/openstack-labs) In this lab we will describe the setup of our Lab environment ans install basic infratructure services that OpenStack uses.
+On the **Vagrant Host**, we will run [Oracle Virtual Box](https://www.virtualbox.org/) to create virtual machines. One of this virtual machines will be a Host to execute the **Ansible Scripts** let's call it **Ansible Host**. The virtual machines will be called the **Nodes**,  and they will play the role that in the real world setup. since Virtual Host is not compatible with Microsoft Hypervisor, we have to disable Windows Hypervisor which is being using with WSL
 
-To avoid confussion, let us first fix some terms. First, there is an actual physical machine on which the Labs will run, in fact is this pc I'm using to write down this post, let's call this machine **PC**.
-On this **PC**, we will run virtual Box to create virtual machines. One of this virtual machines will be a Host to execute the **Ansible Scripts** let's call it **Ansible Host**. The virtual machines will be called the **Nodes**,  and they will play the role that in the real world setup. since Virtual Host is not compatible with Microsoft Hypervisor, we have to disable Windows Hypervisor which is being using with WSL
-
-I am using Windows 10/11, and I need to run a the ansible scripts under **Ansible Host** machine, this host will be named **AnsibleHost**
 We will be using one node named **controller node** on which most of the OpenStack components will run, and two **compute Nodes** (compute1 and compute2).
 
-Inside the compute nodes, the Nova compute service will be installed to carete and provision virtual machines which we call **VMs**. So effectively , we use nested virtualization - the **VM** is itself running inside a virtual machine (the node). To enable a VirtualBox machine to use be have nested VMs use the settings described in [VBox Nested virtualization](https://docs.oracle.com/en/virtualization/virtualbox/6.0/admin/nested-virt.html) and  ["How to enable nested virtualization in virtualbox"](https://ostechnix.com/how-to-enable-nested-virtualization-in-virtualbox/) as
+Inside the compute nodes, the Nova compute service will be installed to create and provision virtual machines which we call **VMs**. So effectively , we use nested virtualization - the **VM** is itself running inside a virtual machine (the node). To enable a VirtualBox machine to use be have nested VMs use the settings described in [VBox Nested virtualization](https://docs.oracle.com/en/virtualization/virtualbox/6.0/admin/nested-virt.html) and  ["How to enable nested virtualization in virtualbox"](https://ostechnix.com/how-to-enable-nested-virtualization-in-virtualbox/) as
 
 ### Strategy
 * Personal PC: Used to host Oracle Virtual Box using Vagrant
-* Ansible Host: Used ti run Ansible scripts (Pre-requisites)
+* Ansible Host: Used to run Ansible scripts (Pre-requisites)
   * Ansible_Host_Packages.sh
-* Controller
+* Controller (Open Stack Main Host)
 * Compute1 and Compute2
 
 
@@ -31,19 +30,25 @@ Inside the compute nodes, the Nova compute service will be installed to carete a
   * Vagrant store the private keys under .vagrant\machines\[machine Name]\virtualbox named private key, these private keys must be copied to the Ansible Host on ~/machines\[machine Name]\virtualbox
 
 
-* Lab2 - [Install Keystone](https://leftasexercise.com/2020/02/03/openstack-keystone-installation-and-overview/)
+* Lab2 - [Install Keystone](https://leftasexercise.com/2020/02/03/openstack-keystone-installation-and-overview/) and   
 [OpenStack Keystone – a deep-dive into tokens and policies](https://leftasexercise.com/2020/02/07/openstack-keystone-a-deep-dive-into-tokens-and-policies/)
 * Lab3 [openstack-supporting-services-glance-and-placement](https://leftasexercise.com/2020/02/10/) (Install images  )
 * Lab 4 [Install Nova](https://leftasexercise.com/2020/02/14/openstack-nova-installation-and-overview/)
 * Lab5 [OpenStack Neutron installation – basic setup and our first instances](https://leftasexercise.com/2020/02/24/openstack-neutron-installation-basic-setup-and-our-first-instances/)
+* Lab6 - Add the Horizon GUI
+* Lab7 - Add a VLAN network as a provider network
 * Lab8 - [Install a virtual router using the Neutron L3 agent](https://leftasexercise.com/2020/03/16/building-virtual-routers-with-openstack/)
 * Lab9 - Allow a tenant to provision VXLAN networks
-* Lab10 - [Introduce a separate network node on which the Neutron agents run](https://leftasexercise.com/2020/03/30/openstack-neutron-handling-instance-metadata/)
+* Lab10 - Introduce a separate network node on which the Neutron agents run
+  * [Handling Instance metadata](https://leftasexercise.com/2020/03/30/openstack-neutron-handling-instance-metadata/)  
+  * [Deep dive into flat and VLAN networks](https://leftasexercise.com/2020/02/)
 * Lab11 - Play with iSCSI
 * Lab12 - LVM playground
 * Lab13 - [Install Cinder](https://leftasexercise.com/2020/04/)
 * Lab13 - Install Cinder
 * Lab14 - Octavia as stand-alone loadbalancer
+* Lab15 - Understanding TLS certicifates with Ansible and NGINX - Part2
+
 
 * Others: [Running your own cloud with OpenStack](running-your-own-cloud-with-openstack-overview)
 * Nova: [OpenStack Nova – deep-dive into the provisioning process](https://leftasexercise.com/2020/02/17/openstack-nova-deep-dive-into-the-provisioning-process/) actually this is where the servers creation is
