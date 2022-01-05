@@ -26,3 +26,12 @@ db_node: controller
 ntp_node: controller
 memcached_node: controller
 mq_node: controller
+# Network configuration
+type_drivers: "local, flat, vlan"
+tenant_network_types: ""
+flat_networks: "physnet"
+network_vlan_ranges: "physnet"
+service_plugins: "router"
+ovs_bridge_mappings: "physnet:br-phys"
+
+

@@ -166,13 +166,13 @@
           password: "{{OS_ADMIN_PASSWORD}}"
         auth_type: password
         enable_dhcp: yes
-        gateway_ip: 172.17.0.1
-        cidr: 172.17.0.0/24
+        gateway_ip: 172.18.0.1
+        cidr: 172.18.0.0/24
         network_name: vlan-network
         name: vlan-subnet
         state: present
-        allocation_pool_start: 172.17.0.2
-        allocation_pool_end:  172.17.0.10
+        allocation_pool_start: 172.18.0.2
+        allocation_pool_end:  172.18.0.10
     - name: Create subnet on flat network
       os_subnet:
         auth:
@@ -219,6 +219,24 @@
       loop:
         - demo-instance-1
         - demo-instance-2
+    - name: Create an additional instance in the flat network
+      os_server:
+        auth:
+          auth_url: http://controller:5000/v3
+          username: demo
+          os_user_domain_name: "default"
+          os_project_domain_name: "default"
+          os_project_name: "demo"
+          password: "{{OS_DEMO_PASSWORD}}"
+        auth_type: password
+        name: demo-instance-3
+        auto_ip: no
+        flavor: m1.nano
+        image: cirros
+        key_name: "{{ssh_key_name}}"
+        network: flat-network
+        security_groups:
+          - default
     - name: Retrieve server list
       os_server_facts:
         auth:
@@ -234,3 +252,4 @@
     - name: Show output
       debug:
         var: server_info
+        

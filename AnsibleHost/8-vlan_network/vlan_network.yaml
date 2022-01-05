@@ -215,10 +215,6 @@
     nova_keystone_user_password: "{{OS_SERVICE_PASSWORD}}"
     keystone_admin_password: "{{OS_ADMIN_PASSWORD}}"
     rabbitmq_password: "{{OS_SERVICE_PASSWORD}}"
-    type_drivers: "local, flat, vlan"
-    tenant_network_types: ""
-    flat_networks: "physnet"
-    network_vlan_ranges: "physnet"
   roles:
     - neutron_server
 
@@ -228,10 +224,6 @@
   vars_files:
     global_vars.yaml
   vars:
-    type_drivers: "local, flat"
-    tenant_network_types: ""
-    flat_networks: "physnet"    
-    ovs_bridge_mappings: "physnet:br-phys"
     metadata_shared_secret: "{{OS_SHARED_SECRET}}"
     rabbitmq_password: "{{OS_SERVICE_PASSWORD}}"
     neutron_db_user_password: "{{OS_SERVICE_PASSWORD}}"
@@ -239,6 +231,15 @@
     nova_keystone_user_password: "{{OS_SERVICE_PASSWORD}}"    
   roles:
     - neutron_agents
+    
+- name: Install L3 agent 
+  hosts: controller_nodes
+  become: yes
+  vars_files:
+    global_vars.yaml
+  roles:
+    - neutron_l3agent
+
 
 - name: Finalize Neutron configuration on compute nodes
   hosts: compute_nodes
@@ -249,11 +250,6 @@
     keystone_admin_password: "{{OS_ADMIN_PASSWORD}}"
     rabbitmq_password: "{{OS_SERVICE_PASSWORD}}"
     neutron_keystone_user_password: "{{OS_SERVICE_PASSWORD}}"
-    type_drivers: "local, flat, vlan"
-    tenant_network_types: ""
-    flat_networks: "physnet"
-    ovs_bridge_mappings: "physnet:br-phys"
-    network_vlan_ranges: "physnet"
   roles:
     - neutron_compute
 
@@ -265,5 +261,6 @@
   vars:
     horizon_physical_networks: "['physnet']"
     horizon_supported_network_types: "['flat', 'vlan']"
+    horizon_enable_router: True
   roles:
     - horizon
