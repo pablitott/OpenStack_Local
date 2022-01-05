@@ -84,7 +84,6 @@
     vxlan_id: 100
   roles:
     - vxlan_bridge
-
 - name: Create and wire up br-ext on compute nodes
   hosts: compute_nodes
   become: yes

@@ -9,7 +9,7 @@
 - name: Import credentials
   hosts: all
   gather_facts: no
-  var_files:
+  vars_files:
     global_vars.yaml
   tasks:
     - name: Read credentials

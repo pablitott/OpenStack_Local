@@ -27,3 +27,56 @@ Host compute2
     LogLevel FATAL
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
+
+Host network
+    HostName 127.0.0.1
+    User vagrant
+    Port 22
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
+    PasswordAuthentication no
+    IdentityFile ~/.ssh/machines/network/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+  
+  Host controller
+    HostName 192.168.100.11
+    User vagrant
+    Port 22
+    IdentityFile ~/.ssh/machines/controller/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host compute1
+    HostName 192.168.100.21
+    User vagrant
+    Port 22
+    IdentityFile ~/.ssh/machines/compute1/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host compute2
+    HostName 192.168.100.22
+    User vagrant
+    Port 22
+    IdentityFile ~/.ssh/machines/compute2/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host network
+    HostName 192.168.100.12
+    User vagrant
+    Port 22
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
+    PasswordAuthentication no
+    IdentityFile ~/.ssh/machines/network/virtualbox/private_key
+    IdentitiesOnly yes
+    LogLevel FATAL
+  

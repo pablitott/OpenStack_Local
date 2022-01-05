@@ -35,7 +35,9 @@ Inside the compute nodes, the Nova compute service will be installed to create a
 * Lab3 [openstack-supporting-services-glance-and-placement](https://leftasexercise.com/2020/02/10/) (Install images  )
 * Lab 4 [Install Nova](https://leftasexercise.com/2020/02/14/openstack-nova-installation-and-overview/)
 * Lab5 [OpenStack Neutron installation – basic setup and our first instances](https://leftasexercise.com/2020/02/24/openstack-neutron-installation-basic-setup-and-our-first-instances/)
-* Lab6 - Add the Horizon GUI
+* Lab6 - [Add the Horizon GUI](https://docs.openstack.org/horizon/latest/install/install-ubuntu.html)  
+  [Horizon via source code DevStack](https://docs.openstack.org/horizon/latest/contributor/quickstart.html#quickstart)  
+  [OpenStack ussuri](https://www.server-world.info/en/note?os=Ubuntu_20.04&p=openstack_ussuri&f=15)
 * Lab7 - Add a VLAN network as a provider network
 * Lab8 - [Install a virtual router using the Neutron L3 agent](https://leftasexercise.com/2020/03/16/building-virtual-routers-with-openstack/)
 * Lab9 - Allow a tenant to provision VXLAN networks
@@ -44,13 +46,14 @@ Inside the compute nodes, the Nova compute service will be installed to create a
   * [Deep dive into flat and VLAN networks](https://leftasexercise.com/2020/02/)
 * Lab11 - Play with iSCSI
 * Lab12 - LVM playground
-* Lab13 - [Install Cinder](https://leftasexercise.com/2020/04/)
-* Lab13 - Install Cinder
+* Lab13 - [Install Cinder](https://leftasexercise.com/2020/04/)  
+          [Cinder Architecture](https://leftasexercise.com/2020/04/20/openstack-cinder-architecture-and-installation/)
+
 * Lab14 - Octavia as stand-alone loadbalancer
 * Lab15 - Understanding TLS certicifates with Ansible and NGINX - Part2
 
 
-* Others: [Running your own cloud with OpenStack](running-your-own-cloud-with-openstack-overview)
+* Others: [Running your own cloud with OpenStack](https://leftasexercise.com/2020/01/20/q-running-your-own-cloud-with-openstack-overview/)
 * Nova: [OpenStack Nova – deep-dive into the provisioning process](https://leftasexercise.com/2020/02/17/openstack-nova-deep-dive-into-the-provisioning-process/) actually this is where the servers creation is
 
 
