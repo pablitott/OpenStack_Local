@@ -10,9 +10,6 @@ __pycache__/
 credentials.yaml
 *os_credentials*
 
-# Disk images
-*.img
-
 # Log files
 *.log
 
