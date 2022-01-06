@@ -21,4 +21,5 @@ credentials.yaml
 *.tfstate.backup
 .terraform
 
-
+# backup files
+*.bak

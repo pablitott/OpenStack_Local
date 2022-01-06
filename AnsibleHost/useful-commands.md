@@ -10,14 +10,12 @@ SSH to server
 open server on http
 openstack console url show demo-instance-1
 
- http://192.168.100.11:ping/vnc_auto.html?path=%3Ftoken%3D4f6e74df-85c1-4ee1-9a3e-645b401dedf3
-
-openstack server ssh  --login cirros --identity ~/demo-key --private demo-instance-1
+ssh connect to instance
+> openstack server ssh  --login cirros --identity ~/demo-key --private demo-instance-1
 
  OpenStack GUI
- http://127.0.0.1/horizon/auth/login/
- 
- http://192.168.100.11/horizon/auth/login/?next=/horizon/
+ > http://127.0.0.1/horizon/auth/login/  
+ > http://192.168.100.11/horizon/auth/login/?next=/horizon/  
 
 Horizon settings:
  sudo vi /etc/openstack-dashboard/local_settings.py

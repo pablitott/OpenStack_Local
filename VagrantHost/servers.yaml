@@ -1,0 +1,91 @@
+# This configuration assumes that we have already created two hostonly networks 
+# called VirtualBox Host-Only Ethernet Adapter #2 and #3
+# If this has not been done, please run the script ../scripts/createVBoxNetworks.sh
+# as auto_config is set to false, VirtualBox should not actually assign IP addresses
+
+---
+work_dir: "/home/vagrant"
+box: "ubuntu/bionic64"
+provider: virtualbox
+hosts:
+  - name: controller
+    hostname: controller.local
+    network:
+      - { type: "private_network", ip: "192.168.100.11", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
+      - { type: "private_network", ip: "172.16.0.2",     name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: False }
+    ports:
+      - { guest: 22,   host: 8222 }
+      - { guest: 80,   host: 80 }
+      - { guest: 5000, host: 5000}
+    custom:
+      - { id: "--memory",         value: "6144" }
+      - { id: "--cpus",           value: "2" }
+      - { id: "--name",           value: "controller" }
+      - { id: "--nicpromisc2",    value: "allow-all" }
+      - { id: "--nicpromisc3",    value: "allow-all" }
+      #allow nested virtualization (check list of vagrant-plugins)
+      - { id: "--nested-hw-virt", value: "on" }
+#==================================================================================
+  - name: compute1
+    hostname: compute1.local
+    network:
+      - { type: "private_network", ip: "192.168.100.21", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
+      - { type: "private_network", ip: "172.16.0.3",     name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: False }
+    ports:
+      - { guest: 22, host: 8200 }
+    custom:
+      - { id: "--memory",      value: "4096" }
+      - { id: "--cpus",        value: "2" }
+      - { id: "--name",        value: "compute1" }
+      - { id: "--nicpromisc2", value: "allow-all" }
+      - { id: "--nicpromisc3", value: "allow-all" }
+#==================================================================================
+  - name: compute2
+    hostname: compute2.local
+    network:
+      - { type: "private_network", ip: "192.168.100.22", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
+      - { type: "private_network", ip: "172.16.0.3",     name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: False }
+    ports:
+      - { guest: 22, host: 8201 }
+    custom:
+      - { id: "--memory",      value: "4096" }
+      - { id: "--cpus",        value: "2" }
+      - { id: "--name",        value: "compute2" }
+      - { id: "--nicpromisc2", value: "allow-all" }
+      - { id: "--nicpromisc3", value: "allow-all" }
+#=====================================================================================
+  - name: network
+    hostname: network.local
+    ssh_private_key: .vagrant/machines/${name}/virtualbox/private_key 
+    network:
+      - { type: "private_network", ip: "192.168.100.12", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
+      - { type: "private_network", ip: "192.168.187.12", name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: True }
+    ports:
+      - { guest: 22, host: 8223 }
+    custom:
+      - { id: "--memory",      value: "4096" }
+      - { id: "--cpus",        value: "2" }
+      - { id: "--name",        value: "network" }
+      - { id: "--nicpromisc2", value: "allow-all" }
+      - { id: "--nicpromisc3", value: "allow-all" }
+      - { id: "--ioapic",      value: "on" }
+#=====================================================================================
+  - name: storage
+    hostname: storage.local
+    network:
+      - { type: "private_network", ip: "192.168.100.31", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
+    ports:
+      - { guest: 22, host: 8210 }
+    custom:
+      - { id: "--memory",    value: "2048" }
+      - { id: "--cpus",      value: "2" }
+      - { id: "--name",      value: "storage" }
+      - { id: "--ioapic",    value: "on" }
+      - { id: "--nictype2",  value: "virtio" }
+      - { id: "--chipset",  value: "ich9" }
+    storage:
+    - controller:
+        - { id: "disk", filename: "./vhd.img", size: 5 * 1024 }
+    - disk:
+        - { id: "--storagectl", format: "SCSI", port: 2, device: 0, type: "hdd", medium: "./vhd.img" }    
+#====================================================================================
