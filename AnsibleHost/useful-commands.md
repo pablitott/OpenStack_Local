@@ -56,3 +56,5 @@ curl \
     -H "X-Auth-Token: $token" \
     -H "OpenStack-API-Version: placement 1.31" \
     "http://controller:5000//v3/users/{user_id}/application_credentials" | jq
+
+OpenStack Images repository [Openstack Images](https://cloud-images.ubuntu.com/bionic/current/)
