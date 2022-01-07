@@ -1,7 +1,6 @@
 # openstack-labs
 ## Setting up our OpenStack-Playground
 [GIT repository](https://leftasexercise.com/2020/01/27/setting-up-our-openstack-playground/)
-
 [playground instructions](https://leftasexercise.com/2020/01/27/setting-up-our-openstack-playground/)
 
 A collection of scripts and Ansible playbooks around OpenStack. Here is a list of the labs currently implemented.
