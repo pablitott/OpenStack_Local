@@ -41,3 +41,7 @@ Links used
 12. [Using Ansible with a jump host](https://leftasexercise.com/2019/12/23/using-ansible-with-a-jump-host/)
 13. [OpenStack Cinder foundations – building logical volumes and snapshots with LVM](https://leftasexercise.com/2020/04/13/openstack-cinder-foundations-building-logical-volumes-and-snapshots-with-lvm/)
 14. [OpenStack Cinder foundations – storage networks, iSCSI, LUNs and all that](https://leftasexercise.com/2020/04/06/openstack-cinder-foundations-storage-networks-iscsi-luns-and-all-that/)
+
+
+Other references:
+[OpenStack Installtion guide](https://docs.openstack.org/install-guide/)
