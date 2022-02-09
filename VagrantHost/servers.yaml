@@ -6,13 +6,18 @@
 ---
 work_dir: "/home/vagrant"
 box: "ubuntu/bionic64"
+box_version: "20220131.0.0"
+net_adapter0: "VirtualBox Host-Only Ethernet Adapter"
+net_adapter2: "VirtualBox Host-Only Ethernet Adapter #2"
+net_adapter3: "VirtualBox Host-Only Ethernet Adapter #3"
+
 provider: virtualbox
 hosts:
   - name: controller
     hostname: controller.local
     network:
-      - { type: "private_network", ip: "192.168.100.11", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
-      - { type: "private_network", ip: "172.16.0.2",     name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: False }
+      - { type: "private_network", ip: "192.168.100.11", name: &net_adapter2, auto_config: True }
+      - { type: "private_network", ip: "172.16.0.2",     name: &net_adapter3, auto_config: False }
     ports:
       - { guest: 22,   host: 8222 }
       - { guest: 80,   host: 80 }
@@ -29,8 +34,8 @@ hosts:
   - name: compute1
     hostname: compute1.local
     network:
-      - { type: "private_network", ip: "192.168.100.21", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
-      - { type: "private_network", ip: "172.16.0.3",     name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: False }
+      - { type: "private_network", ip: "192.168.100.21", name: &net_adapter2, auto_config: True }
+      - { type: "private_network", ip: "172.16.0.3",     name: &net_adapter3, auto_config: False }
     ports:
       - { guest: 22, host: 8200 }
     custom:
@@ -43,8 +48,8 @@ hosts:
   - name: compute2
     hostname: compute2.local
     network:
-      - { type: "private_network", ip: "192.168.100.22", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
-      - { type: "private_network", ip: "172.16.0.3",     name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: False }
+      - { type: "private_network", ip: "192.168.100.22", name: &net_adapter2, auto_config: True }
+      - { type: "private_network", ip: "172.16.0.3",     name: &net_adapter3, auto_config: False }
     ports:
       - { guest: 22, host: 8201 }
     custom:
@@ -58,8 +63,8 @@ hosts:
     hostname: network.local
     ssh_private_key: .vagrant/machines/${name}/virtualbox/private_key 
     network:
-      - { type: "private_network", ip: "192.168.100.12", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
-      - { type: "private_network", ip: "192.168.187.12", name: "VirtualBox Host-Only Ethernet Adapter #3", auto_config: True }
+      - { type: "private_network", ip: "192.168.100.12", name: &net_adapter2, auto_config: True }
+      - { type: "private_network", ip: "192.168.187.12", name: &net_adapter3, auto_config: True }
     ports:
       - { guest: 22, host: 8223 }
     custom:
@@ -73,7 +78,7 @@ hosts:
   - name: storage
     hostname: storage.local
     network:
-      - { type: "private_network", ip: "192.168.100.31", name: "VirtualBox Host-Only Ethernet Adapter #2", auto_config: True }
+      - { type: "private_network", ip: "192.168.100.31", name: &net_adapter2, auto_config: True }
     ports:
       - { guest: 22, host: 8210 }
     custom:

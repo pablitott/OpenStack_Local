@@ -9,7 +9,7 @@
 #source https://github.com/christianb93/openstack-labs
 # instructions: https://leftasexercise.com/2020/01/27/setting-up-our-openstack-playground/
 
-# vagrant cide source
+# vagrant code source
 
 require 'yaml'
 server = YAML.load_file('servers.yaml')
@@ -27,6 +27,9 @@ Vagrant.configure("2") do |config|
     config.vm.define host['name'] do |node|
       node.vm.hostname = host['hostname']
       node.vm.box = server['box']
+      if server['box_version']
+        config.vm.box_version = server['box_version']
+      end
       (host['network']).each do |net|
         node.vm.network "#{net['type']}", ip: "#{net['ip']}", auto_config: "#{net['auto_config']}", name: "#{net['name']}"
       end
@@ -76,9 +79,12 @@ Vagrant.configure("2") do |config|
   ####################################################
   config.vm.define "AnsibleHost" do |host|
     host.vm.hostname = "AnsibleHost.local"
-    host.vm.box = "ubuntu/bionic64"
+    host.vm.box = server['box']
+    if server['box_version']
+      config.vm.box_version = server['box_version']
+    end
     host.vm.provision "ansible286", type: "shell", path: "bootstrap.sh", privileged: true
-    host.vm.network "private_network", ip: "192.168.56.100", name: "VirtualBox Host-Only Ethernet Adapter"
+    host.vm.network "private_network", ip: "192.168.56.100", name: server['net_adapter0']
     host.vm.synced_folder  "../../OpenStack/AnsibleHost", "/home/vagrant/AnsibleHost", owner: "vagrant"  #, mount_options: ["dmode=775,fmode=777"]
 
     # upload private keys created by vagrant, check to change using vagrant loops
