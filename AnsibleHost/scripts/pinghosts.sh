@@ -1,0 +1,1 @@
+ansible all -m ping -i Lab10/hosts.ini

@@ -85,7 +85,7 @@ Vagrant.configure("2") do |config|
     end
     host.vm.provision "ansible286", type: "shell", path: "bootstrap.sh", privileged: true
     host.vm.network "private_network", ip: "192.168.56.100", name: server['net_adapter0']
-    host.vm.synced_folder  "../../OpenStack/AnsibleHost", "/home/vagrant/AnsibleHost", owner: "vagrant"  #, mount_options: ["dmode=775,fmode=777"]
+    host.vm.synced_folder  "../../OpenStack/AnsibleHost", "/home/vagrant", owner: "vagrant"  #, mount_options: ["dmode=775,fmode=777"]
 
     # upload private keys created by vagrant, check to change using vagrant loops
     (server['hosts']).each do |ssh|
@@ -100,9 +100,6 @@ Vagrant.configure("2") do |config|
 
     # copy the content of ansible.cfg to /etc/ansible
     host.vm.provision "file", source: "./ansible/ansible.cfg", destination: "#{home_dir}/.ansible.cfg" 
-    # hosts.ini will be on each Lab folder 
-      # host.vm.provision "file", source: "./ansible/hosts.ini", destination: "#{home_dir}/hosts.ini" 
-      # host.vm.provision "shell", inline: "chmod 600 #{home_dir}/hosts.ini", privileged: true 
     host.vm.provision "shell", inline: "chmod 600 #{home_dir}/.ansible.cfg", privileged: true
 
 

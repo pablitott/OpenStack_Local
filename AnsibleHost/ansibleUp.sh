@@ -1,7 +1,7 @@
 #/bin/bash
-sites=("1-infrastructure" "6-horizon" )
+sites=("Lab1" "Lab6" )
 
-demos=("7-Lab" "8-vlan_network")
+demos=("Lab7" "Lab8")
 # "1-infrastructure" "2-keystone" "3-glance" "4-nova" "5-neutron" "6-horizon" "7-Lab" "8-vlan_network"
 # note Lab1 fail install, run the script twice
 

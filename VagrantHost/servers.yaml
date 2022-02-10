@@ -49,7 +49,7 @@ hosts:
     hostname: compute2.local
     network:
       - { type: "private_network", ip: "192.168.100.22", name: &net_adapter2, auto_config: True }
-      - { type: "private_network", ip: "172.16.0.3",     name: &net_adapter3, auto_config: False }
+      - { type: "private_network", ip: "172.16.0.4",     name: &net_adapter3, auto_config: False }
     ports:
       - { guest: 22, host: 8201 }
     custom:
